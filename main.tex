@@ -3,6 +3,8 @@
 \usecolortheme{rose} % Layout-Definitionen
 \useinnertheme[shadow]{rounded} % Layout-Definitionen
 
+%\usepackage{pgfpages}
+%\pgfpagesuselayout{4 on 1}[a4paper,border shrink=5mm]
 \usepackage[ngerman]{babel} % neue deutsche Rechtschreibung
 \usepackage[T1]{fontenc} % vortragstaugliche Schrift
 \usepackage{lmodern} % vortragstaugliche Schrift
@@ -30,48 +32,44 @@
 \setbeamercovered{dynamic}
 \begin{frame}
 \frametitle{Kontaktprozess}
-Sei $G = (V, E)$ ein zusammenhängender Graph mit endlichem Grad
+Sei $G = (V, E)$ ein zusammenhängender, ungerichteter Graph mit endlichem Grad
 ($\forall v \in V : |\{ e \in E | \exists u \in V : e = \{v, u\} \}| < \infty$).
 \begin{itemize}
-    \item Wir betrachten die Knoten als Individuen
-    \item Die Individuen können von einer Krankheit infiziert werden
-    \item Wir betrachten einen stochastischen Prozess in kontinuierlicher Zeit
+    \item Knoten als Individuen
+    \item Infektion der Individuen durch eine Krankheit
+    \item in kontinuierlicher Zeit
 \end{itemize}
 \end{frame}
 
 
 \begin{frame}{Kontaktprozess}
-Wir definieren den Zustandsraum $\Sigma = \{ 0, 1 \}^V$ als die Menge aller Zustände.
+Sei $\Sigma = \{ 0, 1 \}^V$ die Menge aller Zustände des Prozesses.
 \begin{itemize}
-    \item Zustand 1 entspricht krankem Individuum
-    \item Zustand 0 entspricht gesundem Individuum
+    \item 1 $\to$ Individuum krank
+    \item 0 $\to$ Individuum gesund
 \end{itemize}
-Für jeden Zeitpunkt $t \in [0, \infty)$ definiere $\xi_t \in \Sigma$ als
-den Zustand der Individuen zum Zeitpunkt $t$.
+Für $t \in [0, \infty)$ sei $\xi_t \in \Sigma$ der Zustand zum Zeitpunkt $t$.
 \\
-Das bedeutet: ist $\xi_t(x) = 1$, so ist das Individuum $x$ zum Zeitpunkt $t$ infiziert.
+Für $x \in V$ schreiben wir $\xi_t(x) = 1$, wenn $x$ zum Zeitpunkt $t$ infiziert ist.
+\\
+\vspace{1cm}
+Schreibe $\xi_t$ an Stelle von $\{x \in V\ | \xi_t(x) = 1 \}$.
 \end{frame}
 
 \begin{frame}{Modellierung der Verbreitung}
-    Wenn eine Kante zwischen zwei Knoten existiert, kennen sich die beiden Individuen,
-    bzw. können einander infizieren.
+    Sei $N(x) = \{ y \in V | \exists e \in E : {x, y} \in E \}$ die Nachbarschaft von $x \in V$.
     \begin{itemize}
-        \item[(i)]<2-> 
-            Wenn ein Individuum $x$ infiziert ist, kann es alle gesunden Individuen in seiner Nachbarschaft
-            \begin{equation*}
-                N(x) = \{ y \in V | \exists e \in E : {x, y} \in E \}
-            \end{equation*}
-            mit einer Ansteckungsrate $\beta \geq 0$ anstecken.
-        \item[(ii)]<3->
-            Die Wartezeit dafür exponentiell verteilt, mit Erwartungswert $\frac{1}{\beta}$. (mehr später) 
-        \item[(iii)]
-            höheres $\beta$ impliziert schnellere Wiederholung
-        \item[(iv)]<4-> 
-            Infizierte Individuen werden mit einer Rate $\delta \geq 0$ spontan wieder
-            gesund. (durchschnittliche Zeit bis zur genesung $\frac{1}{\delta}$)
+        \item<2-> 
+            Ein Infiziertes Individuum $x \in V$ steckt alle gesunden Individuen in $N(x)$
+            mit Ansteckungsrate $\beta \geq 0$ an
+        \item<3->
+            Wartezeit zur n\"achsten Ansteckung $\sim exp(\beta)$, mit Erwartungswert $\frac{1}{\beta}$
+        \item<4->
+            höheres $\beta$ impliziert schnellere Ansteckung
+        \item<5-> 
+            Spontane Heilung infizierter Individuen
+            mit Rate $\delta \geq 0$ (durchschnittliche Zeit bis zur genesung $\frac{1}{\delta}$)
     \end{itemize}
-    \onslide<2> {
-    }
 \end{frame}
 
 \begin{frame}{Markow-Eigenschaft für endliche Graphen}
@@ -79,6 +77,7 @@ Das bedeutet: ist $\xi_t(x) = 1$, so ist das Individuum $x$ zum Zeitpunkt $t$ in
     \[
         \mathbb{P}(\xi_{t + h} \in A\ |\ \xi_{t}) = \mathbb{P}(\xi_{t + h} \in A\ |\ \{ \xi_s\ s \leq t \})
     \]
+    Wohldefiniertheit f\"ur endliche Graphen? 
 \end{frame}
 % Auf unendlichen Graphen ist es nicht klar ersichtlich, ob der Kontaktprozess
 % wohldefiniert ist, da die Zustandsmenge $\Sigma$ überabzählbar unendlich ist.
@@ -88,20 +87,20 @@ Das bedeutet: ist $\xi_t(x) = 1$, so ist das Individuum $x$ zum Zeitpunkt $t$ in
     \begin{itemize}
         \item $X_i, i \geq 1, X_i \sim exp(\beta)$ unabhängig
         \item $S_n = \sum_{i = 1}^n X_i$
-        \item $\eta = \sum_{n = 1}^\infty \delta_{S_n}$ ist Poisson Prozess
+        \item $\eta = \sum_{n = 1}^\infty \delta_{S_n}$ ist Poisson Prozess mit Parameter $\beta$
         \item wir schreiben oft $\eta$ statt $\{x \in [0, \infty)\ |\ \eta(x) \not= 0 \}$
     \end{itemize}
 \end{frame}
-\begin{frame}
+\begin{frame}{Poisson-Punkt-Prozess - Eigenschaften}
     Eigenschaften des Poisson-Punkt-Prozesses:
     \begin{itemize}
-        \item [(i)]<2-> Für $B \subseteq [0, \infty)$ ist $|\eta(B)| \sim Poisson(\beta \cdot \bblambda(B))$  
-        \item [(ii)]<3-> Für paarweise Disjunkte Mengen $B_1$, $B_2$, $B_3$, ..., $B_n \subseteq [0, \infty)$ 
+        \item <2-> Für $B \subseteq [0, \infty)$ ist $|\eta(B)| \sim Poisson(\beta \cdot \bblambda(B))$  
+        \item <3-> Für paarweise Disjunkte Mengen $B_1$, $B_2$, $B_3$, ..., $B_n \subseteq [0, \infty)$ 
         sind $\eta(B_1), \eta(B_2), \eta(B_3), ..., \eta(B_n)$ unabhängig.
-        \item [(iii)]<4-> $\eta_1 + \eta_2 \sim Poisson(\beta_1 + \beta_2)$, für
-        $\eta_1 \in Poisson(\beta_1)$ und $\eta_2 \in Poisson(\beta_2)$
+        \item <4-> $\eta_{\alpha} + \eta_\beta \sim \eta_{\alpha + \beta}$
         (Superpositionseigenschaft)
-        \item [(iv)]<5-> Entfernen von Punkten aus $\eta$ mit Wahrscheinlichkeit $1 - p$ ergibt einen Prozess $\eta^\prime \sim Poisson(p \cdot \beta)$ (Ausdünnungseigenschaft)
+        \item <5-> unabh\"angiges Entfernen von Punkten aus $\eta_\beta$ mit Wahrscheinlichkeit $1 - p$ ergibt einen Prozess $\eta^\prime \sim Poisson(p \cdot \beta)$ (Ausdünnungseigenschaft)
+        \item <6-> Erwartungswert der Wartezeit zum n\"achsten Punkt $\frac{1}{\beta}$ (Ged\"achtnislosigkeit/Markow-Eigenschaft)
     \end{itemize}
 \end{frame}
 
@@ -112,19 +111,17 @@ Das bedeutet: ist $\xi_t(x) = 1$, so ist das Individuum $x$ zum Zeitpunkt $t$ in
 
 \setbeamercovered{transparent}
 \begin{frame}{Harris' graphische Darstellung}
-Sei $G = (V, E)$ Graph mit endlichem Grad, (als Beispiel $\mathbb{L}^1$  in Grafik). Nun betrachten wir $G \times \mathbb{R}^+_0$. Wobei wir die reelle Halbachse
-als Zeitachse betrachten.
+Sei $G = (V, E)$ Graph wie oben, (als Beispiel $\mathbb{L}^1$  in Grafik). Betrachte $G \times \mathbb{R}^+_0$. Reelle Halbachse $\sim$ Zeitachse
 \begin{center}
-    \includegraphics[width=0.75\textwidth]{images/contact process time.png}
+    \includegraphics[width=0.75\textwidth]{images/contact process arrows.png}
 \end{center}
 \end{frame}
 
 \begin{frame}{Harris' graphische Darstellung - Genesungsrate $\delta$}
-    Für alle $x \in V$ seien $D_x$ ein Poisson-Punkt-Prozesse mit Parameter $\delta$ und unabhängig.
+    Für $x \in V$ sei $D_x$ ein Poisson-Punkt-Prozesse mit Parameter $\delta$ und alle $D_x$ unabhängig.
     \begin{itemize}
         \item $t \in D_x$ als Zeitpunkte spontaner Heilung
-        \item In Harris' graphischer Darstellung zeichne ein Kreuz auf $(x, t)$ für jeden Punkt
-            $t \in D_x$
+        \item zeichne Kreuz auf $(x, t)$ für $t \in D_x$
     \end{itemize}
     \begin{center}
         \includegraphics[width=0.6\textwidth]{images/contact process crosses.png}
@@ -132,8 +129,8 @@ als Zeitachse betrachten.
 \end{frame}
 
 \begin{frame}{Harris' graphische Darstellung - Infektionsrate $\beta$}
-    Für jede Kante $e = \{ x, y \} \in E$ sei $B_{x, y}$ ein Poisson-Punkt-Prozess mit Parameter
-    $\beta$.
+    Für $e = \{ x, y \} \in E, x, y \in V$ seien $B_{x, y}$ und $B_{y, x}$ Poisson-Punkt-Prozesse mit Parameter
+    $\beta$, und alle $B_{x,y}, B_{y,x}$ unabh\"angig.
     \begin{itemize}
         \item $t \in B_{x, y}$ als Zeitpunkte der Infektion von $y$ durch $x$
         \item In Harris' graphischer Darstellung durch einen Pfeil von $(x, t)$ nach $(y, t)$
@@ -147,29 +144,32 @@ als Zeitachse betrachten.
 
 \begin{frame}{Harris' graphische Darstellung - Pfade}
     Für $t_0 < t_1 < ... < t_n < t_{n + 1}$ und $x_0, x_1, ..., x_n \in V$
-    und $B_{x_i, x_{i + 1}} \cap [t_i, t_{i + 1}] = \emptyset$, sowie $t_i \in D_{x_{i - 1}}$ für
-    $0 \leq i \leq n$, schreiben wir 
+    und $D_{x_{i - 1}} \cap [t_i, t_{i + 1}] = \emptyset$, sowie $t_{i + 1} \in B_{x_i, x_{i + 1}}$ für
+    $0 \leq i < n$, schreiben wir 
     \begin{equation*}
         (x, t) \to (y, s)
     \end{equation*}
     wenn $x = x_0, y = x_n$ und $t = t_0, s = t_{n + 1}$.
+    \\
+    Beispiel f\"ur Pfad $(E, t) \to (C, s)$
     \begin{center}
-        \includegraphics[width=0.6\textwidth]{images/contact process path.png}
+        \includegraphics[width=0.5\textwidth]{images/contact process path.png}
     \end{center}
 \end{frame}
 
-\begin{frame}{Pfade - Infektionsweg}
+\begin{frame}{Formale definition des Kontaktprozesses}
     Sei $\xi_0 \in \Sigma = \{0, 1\}^V$ ein Anfangszustand. Wir definieren $\xi_t: V \to \Sigma$ für
     $x \in V, t \in \mathbb{R}^+_0$ als $\xi_t(x) := 1$ genau dann, wenn es
     einen Pfad von $(y, 0) \to (x, t)$ mit $y \in V$ gibt und $\xi_0(y) = 1$.
-    \\
-    Dann ist $\xi_t$ ein Kontaktprozess mit Infektionsrate $\beta$ und Heilungsrate $\delta$.
+    \begin{block}{}
+        Nach Konstruktion ist $\xi_t$ ein Kontaktprozess mit Infektionsrate $\beta$ und Heilungsrate $\delta$.
+    \end{block}
     % Intuitiv ist es klar, dass es sich bei $\xi_t$ um den oben definierten Kontaktprozess handelt.
     % Individuen können andere mit einer Rate von $\beta$ infizieren und mit einer Rate $\delta$
     % spontan genesen. Durch die Konstruktion (und insbesondere die Gedächtnislosigkeit der einzelnen
     % Poisson-Punkt-Prozesse) ist die Markow-Eigenschaft des Prozesses gegeben.
     \begin{center}
-        \includegraphics[width=0.6\textwidth]{images/contact process path.png}
+        \includegraphics[width=0.6\textwidth]{images/contact process process.png}
     \end{center}
 \end{frame}
 
@@ -183,23 +183,25 @@ als Zeitachse betrachten.
     %Da es sich bei $\mathbb{L}^d$ um einen unendlichen Graphen handelt, ist es auf den ersten
     %Blick nicht eindeutig ersichtlich wie viele Knoten aus $\mathbb{L}^d$ einen Einfluss auf
     %den Knoten $x$ haben können.
-    Sei $\xi_t$ eine Realisierung des Kontaktprozess mit Parametern $\beta, \delta > 0$.
-    Dann sei 
+    \textbf{Definition:}
+    Sei $\xi_t$ Kontaktprozess mit Parametern $\beta, \delta > 0$.
+    Dann sei der Einflussbereich
     \begin{equation*}
-        I_{x, t, t + \varepsilon} := \{y \in V\ |\ \exists s : t < s < t + \varepsilon \wedge (x,t) \to (y,s) \} 
+        I_{x, t, \varepsilon} := \{y \in V\ |\ \exists s : (y, t) \to (x, s) \wedge t < s < t + \varepsilon \} 
         \end{equation*}
-    die Menge der Knoten, mit einem Pfad der maximalen Länge
-    $\varepsilon$ nach $x$ beginnend zum Zeitpunkt $t$. 
+    die Menge der Knoten, mit einem Pfad nach $x$ der maximalen Länge
+    $\varepsilon$ beginnend zum Zeitpunkt $t$. 
     \begin{block}{Lemma}
         Es gibt ein $\varepsilon > 0$, sodass für alle Knoten $x \in V$ gilt
         \begin{equation*}
-            \mathbb{P}(\{ \#I_{x, t, t + \varepsilon} < \infty \}) = 1
+            \mathbb{P}(\{ \#I_{x, t, \varepsilon} < \infty \}) = 1
         \end{equation*}
     \end{block}
 \end{frame}
 
-\begin{frame}{Einflussbereich}
-    Wir definieren eine Kante $e = \{x_1, x_2\} \in E$ als offen im Zeitraum $[t, t + \varepsilon]$
+\begin{frame}{Endliche Cluster - Einflussbereich}
+    \textbf{Definition:}
+    Sei $e = \{x_1, x_2\} \in E$ offen im Zeitraum $[t, t + \varepsilon]$
     genau dann wenn $(B_{x_1, x_2} \cup B_{x_2, x_1}) \cap [t, t + \varepsilon] \not= \emptyset$
     
     \begin{block}{Lemma}
@@ -207,9 +209,9 @@ als Zeitachse betrachten.
     \end{block}
     \textbf{Beweis:}
     \begin{itemize}
-        \item $|B_{x_1,x_2}| \sim Poisson(\beta)$
+        \item $|B_{x_1,x_2}\cup [t, t+\varepsilon]| \sim Poisson(\beta\epsilon)$
         \item Unabhängigkeit von $B_{x_1,x_2}$ und $B_{x_1,x_2}$
-        \item $\mathbb{P}(|\eta([t, t + \varepsilon])| = 0) =  1 - e^{-2\beta\varepsilon}$
+        \item $\mathbb{P}(\text{e offen in } [t, t + \varepsilon]) = 1 - \mathbb{P}(B_{x_1,x_2}\cup [t, t+\varepsilon] = \emptyset)= 1 - e^{-2\beta\varepsilon}$
     \end{itemize}
     Wahrscheinlichkeit für $\{ e \text{ offen in}\ [t, t + \varepsilon] \} $ beliebig klein wählbar
 \end{frame}
@@ -222,9 +224,9 @@ als Zeitachse betrachten.
 
 \setbeamercovered{dynamic}
 \begin{frame}{Einflussbereich - Perkolation}
-    Wir wissen, dass die kritische Wahrscheinlichkeit $p_c$ für Perkolationen
-    auf $\mathbb{L}^D$ nicht degeneriert ist, also $0 < p_c < 1$.
-    Und dass für alle $p < p_c$ die Perkolationswahrscheinlichkeit
+    Kritische Wahrscheinlichkeit $p_c$ für Perkolationen
+    auf $\mathbb{L}^D$ nicht degeneriert, also $0 < p_c < 1$.
+    Für alle $p < p_c$ ist die Perkolationswahrscheinlichkeit
     $\theta(p) = \mathbb{P}(|C_0| = \infty) = 0$.
     \onslide<2->
     \vspace{1cm}
@@ -236,11 +238,11 @@ als Zeitachse betrachten.
 \begin{frame}{Einflussbereich}
     Aus der Konstruktion von $I_{x, t, t + \varepsilon}$ folgt, dass
     \begin{equation*}
-        \{ |I_{x, t, t + \varepsilon}| < \infty \} \subseteq \{ |C_x| < \infty \}   
+        \{ |I_{x, t, \varepsilon}| = \infty \} \subseteq \{ |C_x| = \infty \}   
     \end{equation*}
     woraus wiederum folgt, dass
     \begin{equation*}
-        \mathbb{P}(\{ |I_{x, t, t + \varepsilon}| < \infty \}) \leq \mathbb{P}(\{ |C_x| < \infty \}) = 1
+        \mathbb{P}(\{ |I_{x, t, \varepsilon}| = \infty \}) \leq \mathbb{P}(\{ |C_x| = \infty \}) = 0
     \end{equation*}
     und damit auch das oben genannte Lemma.
     \\
@@ -249,16 +251,14 @@ als Zeitachse betrachten.
 \end{frame}
 
 \begin{frame}{Harris' graphische Darstellung - Kopplung}
-    Seien $\beta_1 \leq \beta_2$ und $\delta_1 \geq \delta_2$. Wir betrachten nun
-    eine Realisierung eines Kontaktprozesses mit Parametern $(\beta_2, \delta_1)$.
+    Seien $\beta_1 \leq \beta_2 \geq 0$ und $\delta \geq 02$. Sei ein Kontaktprozess $\xi_t$ mit Parametern $(\beta_1, \delta)$.
     \begin{itemize}
-        \item<2-> Wir entfernen zufällig Punkte aus $B_{x, y}$ (Pfeile) mit Wahrscheinlichkeit
-        $1 - \frac{\beta_1}{\beta_2}$.
-        \item<3-> Kontaktprozess mit Parametern $(\beta_1, \delta_1)$ (Ausdünnungseigenschaft)
-        \item<4-> Höchstens gleich viele Infektionen bei selbem Ausgangszustand
+        \item<2-> Zufällige neue Infektionen $B^\prime_{x, y} := B_{x, y} + \eta_{\beta_2 - \beta_1}$
+        \item<3-> Kontaktprozess $\xi_t^\prime$ mit Parametern $(\beta_2, \delta)$ (Superpositionseigenschaft)
+        \item<4-> Mindestens gleich viele Infektionen bei selbem Ausgangszustand
     \end{itemize}
     \onslide<5->
-    $\implies$ \#Infektionen nicht-fallend mit Infektionsrate $\beta$
+    $\implies$ \#Infektionen monoton steigend mit steigender Infektionsrate $\beta$
 \end{frame}
 
 \begin{frame}{Harris' graphische Darstellung - nicht wachsend in $\beta$}
@@ -268,16 +268,15 @@ als Zeitachse betrachten.
 \end{frame}
 
 \begin{frame}{Harris' graphische Darstellung - Kopplung}
-    Seien $\beta_1 \leq \beta_2$ und $\delta_1 \geq \delta_2$. Wir betrachten nun
-    eine Realisierung eines Kontaktprozesses mit Parametern $(\beta_2, \delta_1)$.
+    Seien $\beta \geq 0$ und $\delta_1 \geq \delta_2 \geq 0$ und ein Kontaktprozess $\xi_t$ mit Parametern $(\beta, \delta_1)$.
     \begin{itemize}
-        \item<2-> Wir entfernen zufällig Punkte aus $D_x$ (Kreuze) mit Wahrscheinlichkeit
+        \item<2-> Wir entfernen zufällig Punkte aus $D_x$ mit Wahrscheinlichkeit
         $1 - \frac{\delta_2}{\delta_1}$.
-        \item<3-> Kontaktprozess mit Parametern $(\beta_2, \delta_2)$ (Ausdünnungseigenschaft)
+        \item<3-> Kontaktprozess $\xi_t^\prime$ mit Parametern $(\beta, \delta_2)$ (Ausdünnungseigenschaft)
         \item<4-> Mindestens gleich viele Infektionen bei gleichem Ausgangszustand
     \end{itemize}
     \onslide<5->
-    $\implies$ \#Infektionen nicht-fallend mit Heilungsrate $\delta$
+    $\implies$ \#Infektionen monoton fallen mit steigender Heilungsrate $\delta$
 \end{frame}
 
 \begin{frame}{Harris' graphische Darstellung - nicht fallend in $\delta$}
@@ -286,12 +285,11 @@ als Zeitachse betrachten.
     \end{center}
 \end{frame}
 
-\begin{frame}{Monotinie und Additivität}
-    Wir schreiben $\xi_t^A$ statt $\{x \in V | \xi_t(x) = 1\}$.
+\begin{frame}{Monotonie und Additivität}
+    
     Für $G = (E, V)$ und $A \subseteq V$ sei $\xi_t^A$ ein Kontaktprozess mit
     Parametern $(\beta, \delta)$ und Ausgangszustand $\xi_0^A = A$. 
-    \\
-    Sei $\xi_t^B$ ein Kontaktprozess mit $B_{x,y}, D_x$ wie bei $\xi_t^A$ aber $\xi_0^B := B$. 
+    Sei $\xi_t^B = \xi_t^A$ jedoch mit $\xi_0^B := B$. 
     \begin{itemize}
         \item<2-> $\xi_t^A \cup \xi_t^B = \xi_t^{A \cup B}$ (Additivität)
         \item<3-> für $A \subseteq B$ folgt $\forall x \in V : \xi_t^A \subseteq \xi_t^B$ (Monotonie)
@@ -300,7 +298,7 @@ als Zeitachse betrachten.
 
 \begin{frame}{Monotonie und Additivität}
     \begin{center}
-        \includegraphics[width=0.75\textwidth]{images/contact process crosses.png}
+        \includegraphics[width=0.75\textwidth]{images/contact process arrows.png}
     \end{center}
 \end{frame}
 
@@ -330,6 +328,148 @@ als Zeitachse betrachten.
     \end{center}
 \end{frame}
 
+\begin{frame}{Kritischer Wert}
+    Sei $\xi_t^0 := \xi_t^{\{0\}}$ und
+    \begin{equation*}
+        \theta(\beta) := \mathbb{P}_\beta(\{ \xi_t^0 \not= \emptyset\ \forall t \geq 0 \})
+    \end{equation*}
+    die \textbf{Überlebenswahrscheinlichkeit} des Kontaktprozess. O.B.d.A. sei $\delta = 1$,
+    sonst betrachte $\beta^\prime := \frac{\beta}{\delta} $
+    mit zeitlicher Skalierung um $\delta$.
+    \\
+    \vspace{0.5cm}
+    \onslide<2->
+    Der \textbf{kritische Wert} $\beta_c := \sup\ \{ \beta | \theta(\beta) = 0 \}$ ist dann
+    die Infektionsrate, ab der der Prozess eine positive Überlebenswahrscheinlichkeit hat.
+\end{frame}
+
+\begin{frame}{Kritischer Wert}
+    \begin{block}{Lemma}
+        \begin{equation*}
+            \text{es gilt}\ \theta(\beta) 
+            \begin{cases}
+                = 0 & \text{if}\ \beta < \beta_c\\
+                > 0 & \text{if}\ \beta > \beta_c
+            \end{cases}
+        \end{equation*}
+    \end{block}
+    trivial, da $\theta(\beta)$ nicht fallend in $\beta$ ist (Monotonie)
+    
+    \begin{block}{Satz 6.7}
+        F\"ur $d \geq 1$ gilt $\frac{1}{2d - 1}$ \leq \beta_c(d) \leq \infty
+    \end{block}
+\end{frame}
+
+\begin{frame}{Absch\"atzung des kritischen Wertes - Submodularit\"at}
+    Sei $\sigma(A) = \mathbb{P}(\{ \xi_t^A \not = \emtpyset für alle t \geq 0 \}$. 
+    
+    \begin{block}{Lemma}
+        Die \"Uberlebenswahrscheinlichkeit $\sigma(A), A \subseteq \mathbb{Z}^d$ ist submodular
+        \begin{equation*}
+            \sigma(A \cup B) + \sigma(A \cap B) \leq \sigma(A) + \sigma(B)
+        \end{equation*}
+    \end{block}
+    \textbf{Beweisidee:}
+    \begin{itemize}
+        \item Betrachte $\xi_t^A, \xi_t^B, \xi_t^{A \cap B}, \xi_t^{A \cup B}$ mit gleicher graphischer Darstellung
+        \item $\mathbb{P}(\xi_t^A \cup \xi_t^B = \xi_t^{A \cup B}) = 1$ und $\mathbb{P}(\xi_t^{A \cap B} \subseteq \xi_t^A \cap \xi_t^B) = 1$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Absch\"atzung des kritischen Wertes - Fortsetzung}
+    F\"ur eine endliche Menge $A \subseteq \mathbb{Z}^d$ l\"asst sich $\sigma(A)$ \"uber die \"Uberlebenswahrscheinlichkeit nach dem ersten
+    Ereignis absch\"atzen
+    \begin{align*}
+        \sigma(A) &= \frac{1}{|A|(1 + 2d \beta)}\sum_{x \in A} \left( \sigma(A \backslash \{ x \})
+                   + \beta \sum_{y \in N(x)} \sigma(A \cup \{ y \}) \right) \\
+                  &= \frac{1}{|A|(1 + 2d \beta)} \sum_{x \in A} \left( \sigma(A \backslash \{ x \})
+                   + \beta \sum_{\mathclap{\substack{y \in N(x)\\y \not\in A}}} \sigma(A \cup \{ y \}) 
+                   + \beta \sum_{\mathclap{\substack{y \in N(x)\\y \in A}}}\sigma(A) \right)
+    \end{align*}
+\end{frame}
+\begin{frame}{Absch\"atzung des kritischen Wertes - Fortsetzung}
+    Insbesondere f\"ur $x, y \in \mathbb{Z}^d$ und $|x - y| = 1$ sei $\sigma_2 = \sigma(A) = \sigma(\{ x, y \})$.
+    \begin{align*}
+        2(1 + 2d\beta)\sigma_2 &= 2\left(\sigma_1
+                               + \beta \sum_{\mathclap{\substack{z \in N(x)\\ z \not = y}}} \sigma(\{ x, y, z \})
+                               + \beta \sigma(\{ x, y \}) \right) \\
+                              &\leq 2\left( \sigma_1 + \beta (2d - 1) (2 \sigma_2 - \sigma_1)
+                               + \beta \sigma_2 \right)
+    \end{align*}
+\end{frame}
+
+\begin{frame}{Absch\"atzung des kritischen Wertes - Fortsetzung}
+    \begin{align*}
+        0 &\leq \sigma_1 + \beta (2d - 1) (2 \sigma_2 - \sigma_1) + \beta \sigma_2 -  (1 + 2d\beta)\sigma_2 \\
+          &= \sigma_1 + 4d \beta \sigma_2 - 2 \beta \sigma_2 - 2d \beta \sigma_1 + \beta \sigma_1 + \beta \sigma_2
+           - \sigma_2 - 2d \beta \sigma_2 \\
+          &= \sigma_1 (1 + \beta - 2d\beta) - \sigma_2 (1 + \beta - 2d \beta) \\
+          &= (\sigma_1 - \sigma_2)(1 - \beta(2d - 1))
+    \end{align*}
+    Für $\beta < \frac{1}{2d - 1}$ folgt $\sigma_1 \geq \sigma_2$, weswegen beide $0$ sein m\"ussen (Monotonie).
+    \begin{equation*}
+        \implies \beta_c \geq \frac{1}{2d - 1} 
+    \end{equation*}
+\end{frame}
+
+\begin{frame}{Absch\"atzung des kritischen Wertes - Fortsetzung}
+    Da $\mathbb{L}^1$ eingebettet in $\mathbb{L}^d$ folgt auch, dass 
+    \begin{equation*}
+        \beta_c(d) \leq \beta_c(1)
+    \end{equation*}
+    Absch\"atzung von $\beta_c(1)$ durch Diskretisierungsargument:
+    \begin{center}
+        \includegraphics[width=0.5\textwidth]{images/contact process discretization.png}
+    \end{center}
+    \textbf{Idee:} Unterteilung in \"uberlappende Zeitabschnitte, Absch\"atzung der Wahrscheinlichkeit
+    gleichzeitig nicht geheilt zu werden und eine potentielle Infektion weiterzugeben
+\end{frame}
+\begin{frame}{Absch\"atzung des kritischen Wertes - Fortsetzung}
+    \begin{itemize}
+        \item F\"ur $m, n \in \mathbb{Z}, m + n$ ungerade und $\Delta > 0$, sei
+            \begin{align*}
+            X_{m, n} = 1 \iff &D_m \cap ((n - 1)\Delta, (n + 1)\Delta] = \emptyset\\
+                \wedge &B_{m, m - 1} \cap (n\Delta, (n + 1)\Delta] \not = \emptyset\\
+                \wedge &B_{m, m + 1} \cap (n\Delta, (n + 1)\Delta] \not = \emptyset\\
+                \text{sonst} X_{m, n} = 0
+            \end{align*}
+        \item $X_{m, n}$ unabh\"angig, da paarweise disjunkte Mengen und Poisson-Punkt-Prozess
+        \item $\mathbb{P}(X_{m, n}) = (e^{-\Delta})^2 (1 - e^{-\Delta \beta})^2$
+        \item $\mathbb{P}(X_{m, n})$ maximal bzgl. $\Delta$ f\"ur $e^{-\Delta \beta} = \frac{1}{1 + \beta}$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Absch\"atzung des kritischen Wertes - Fortsetzung}
+    \begin{align*}
+        (e^{-\Delta})^2(1 - e^{-\Delta\beta})^2 &\overset{x := e^{-\delta}}{=} 
+            x^2(1 - x^\beta)^2 \\
+            &= x^2(x^2\beta - 2 x^\lambda + 1) \\
+            &= x^{2(1 + \beta)} - 2x^{2 + \beta} + x^2 \\
+            0 = \frac{d}{dx} x^{2(1 + \beta)} - 2x^{2 + \beta} + x^2 
+            &= 2(1 + \beta) x^{1 + 2\beta} - 2(2 + \beta)x^{1 + \beta} + 2x \\
+            &= 2x\left( (1 + \beta)x^{2\beta} - (2 + \beta)x^\beta + 1 \right) \\
+       \overset{\mathclap{x \not= 0}}{\iff } 0 &= ( 1 + \beta) x^{2\beta} - ( 2 + \beta)x^\beta + 1 \\
+            &\overset{\mathclap{z:= x^\beta}}{=} (1 + \beta) z^2 - (2 + \beta)x + 1\\
+            \iif e^{-\Delta\beta} = z &\in \{ \frac{1}{1 + \beta}, 1 \}
+    \end{align*}
+\end{frame}
+
+\begin{frame}{Absch\"atzung des kritischen Wertes - Fortsetzung}
+    Nun können wir einsetzen:
+    \begin{align*}
+        \mathbb{P}(X_{m, n} = 1) &= ((e^{-\Delta\beta})^{\frac{1}{\beta}})^2(1 - e^{-\Delta\beta})^2 \\
+                                 &= \left(\frac{1}{1 + \beta}\right)^\frac{2}{\beta}\left(\frac{\beta}{1 + \beta}\right)^2 \\
+                                 &= \frac{1}{(1 + \beta)^{2/\beta}}\frac{\beta^2}{(1 + \beta)^2} \\
+                                 &= \frac{\beta^2}{(1 + \beta)^{(2 + 2/\beta)}} \overset{\beta \to \infty}{\to} 1
+    \end{align*}
+    Wir können die Punkte $(m, n)$ rotieren und die gerichtete Knoten-/Platzperkolation in $\mathbb{Z}^2$ betrachten. 
+    \begin{itemize}
+        \item $p_c^{V\to} < 1$ 
+        \item $\mathbb{P}(X_{m, n} = 1) > p_c^\to$ f\"ur $\beta$ ausreichend groß
+        \item $\theta(\beta) > 0$
+    \end{itemize}
+\end{frame}
+
 \begin{frame}{Invariante Maße des Kontaktprozesses}
     Sei $\mathcal{I}$ die Menge aller unter $S_t, t \geq 0$, der Übergangshalbgruppe  
     des Kontaktprozesses, invariante Maße auf $\Sigma = \{ 0, 1 \}^{\mathbb{Z}^d}$.
@@ -337,9 +477,9 @@ als Zeitachse betrachten.
     \begin{equation*}
         \mu S_t = \mu
     \end{equation*}
-    Diese Menge der invarianten Maße ist konvex, da für zwei Maße $\phi_1, \phi_2 \in \mathcal{I}$
-    gilt das $\alpha \phi_1 + ( 1 - \alpha) \phi_2 \in \mathcal{I}$ für $\alpha \in [0, 1]$.
-    Somit bestimmen die \textit{extremen} Maße alle invarianten Maße des Kontaktprozesses.
+    $\mathcal{I}$ ist konvex, da für zwei Maße $\phi_1, \phi_2 \in \mathcal{I}$
+    gilt, dass $\alpha \phi_1 + ( 1 - \alpha) \phi_2 \in \mathcal{I}$ für $\alpha \in [0, 1]$.
+    Somit bestimmen die \textit{extremen Maße} von $\mathcal{I}$ alle invarianten Maße des Kontaktprozesses.
 \end{frame}
 
 \begin{frame}{Invariante Maße des Kontaktprozesses}
@@ -405,41 +545,12 @@ als Zeitachse betrachten.
     \end{equation*}
 \end{frame}
 
-\begin{frame}{Kritische Wert}
-    
-    Sei $\xi_t^0 := \xi_t^{\{0\}}$ und
-    \begin{equation*}
-        \theta(\beta) := \mathbb{P}_\beta(\{ \xi_t^0 \not= \emptyset\ \forall t \geq 0 \})
-    \end{equation*}
-    die \textbf{Überlebenswahrscheinlichkeit} des Kontaktprozess. O.B.d.A. sei $\delta = 1$,
-    sonst betrachte $\beta^\prime := \frac{\beta}{\delta} $
-    mit zeitlicher Skalierung um $\delta$.
-    \\
-    \vspace{0.5cm}
-    \onslide<3->
-    Der \textbf{kritische Wert} $\beta_c := \sup\ \{ \beta | \theta(\beta) = 0 \}$ ist dann
-    die Infektionsrate, ab der der Prozess eine positive Überlebenswahrscheinlichkeit hat.
-\end{frame}
-
-\begin{frame}{Kritischer Wert}
-    \begin{block}{Lemma}
-        \begin{equation*}
-            \text{es gilt}\ \theta(\beta) 
-            \begin{cases}
-                = 0 & \text{if}\ \beta < \beta_c\\
-                > 0 & \text{if}\ \beta > \beta_c
-            \end{cases}
-        \end{equation*}
-    \end{block}
-    trivial, da $\theta(\beta)$ nicht fallend in $\beta$ ist (Monotonie)
+\begin{frame}{Überlebenswahrscheinlichkeit und Dichte infizierter Individuen}
     \begin{block}{Satz 6.5}
         Die Dichte infizierter Individuen
         $\overline{\nu}(\{ \sigma \in \Sigma | \sigma_x = 1 \})$ für ein $x \in \mathbb{Z}^d$
         ist gleich dem kritischen Wert $\beta_c$.
     \end{block}
-\end{frame}
-
-\begin{frame}{Überlebenswahrscheinlichkeit und Dichte infizierter Individuen}
     \textbf{Beweis:}
     Da $\theta(\beta)$ nicht fallend ist, wissen wir dass
     \begin{align*}
@@ -449,110 +560,6 @@ als Zeitachse betrachten.
         \overset{\text{Dualität}}&{=} \lim_{t \to \infty} \mathbb{P}_\beta(\{ \xi_t^{\mathbb{Z}^D} \cap \{ 0 \} \not = \emptyset \}) \\
         &= \overline{\nu}(\{ \sigma \in \Sigma\ |\ \sigma(0) = 1 \})
     \end{align*}
-\end{frame}
-
-\begin{frame}{Submodularit\"at}
-    Sei $\sigma(A) = \mathbb{P}(\{ \xi_t^A \not = \emtpyset für alle t \geq 0 \}$. Dann gilt
-    \begin{equation*}
-        \sigma(A \cup B) + \sigma(A \cap B) \leq \sigma(A) + \sigma(B)
-    \end{equation*}
-    \textbf{Beweisidee:}
-    \begin{itemize}
-        \item Betrachte $\xi_t^A, \xi_t^B, \xi_t^{A \cap B}, \xi_t^{A \cup B}$ mit gleicher graphischer Darstellung
-        \item $\mathbb{P}(\xi_t^A \cup \xi_t^B = \xi_t^{A \cup B}) = 1$ und $\mathbb{P}(\xi_t^A \cap \xi_t^B \subseteq \xi_t^{A \cap B}) = 1$
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Absch\"atzung des kritischen Wertes}
-    F\"ur eine endliche Menge $A \subseteq \mathbb{Z}^d$ l\"asst sich $\sigma(A)$ \"uber den n\"achsten
-    Schritt bestimmen
-    \begin{align*}
-        \sigma(A) &= \frac{1}{|A|(1 + 2d \beta)}\sum_{x \in A} \left( \sigma(A \backslash \{ x \})
-                   + \beta \sum_{y \in N(x)} \sigma(A \cup \{ y \}) \right) \\
-                  &= \frac{1}{|A|(1 + 2d \beta)} \sum_{x \in A} \left( \sigma(A \backslash \{ x \})
-                   + \beta \sum_{\mathclap{\substack{y \in N(x)\\y \not\in A}}} \sigma(A \cup \{ y \}) 
-                   + \beta \sum_{\mathclap{\substack{y \in N(x)\\y \in A}}}\sigma(A) \right)
-    \end{align*}
-\end{frame}
-\begin{frame}{Absch\"atzung des kritischen Wertes}
-    Insbesondere f\"ur $x, y \in \mathbb{Z}^d$ und $|x - y| = 1$ sei $\sigma_2 = \sigma(A) = \sigma(\{ x, y \})$.
-    \begin{align*}
-        (1 + 2d\beta)\sigma_2 &= \sigma_1
-                               + \beta \sum_{\mathclap{\substack{z \in N(x)\\ z \not = y}}} \sigma(\{ x, y, z \})
-                               + \beta \sigma(\{ x, y \}) \\
-                              &\leq \sigma_1 + \beta (2d - 1) (2 \sigma_2 - \sigma_1)
-                               + \beta \sigma_2 
-    \end{align*}
-\end{frame}
-
-\begin{frame}{Absch\"atzung des kritischen Wertes - Fortsetzung}
-    \begin{align*}
-        0 &\leq \sigma_1 + \beta (2d - 1) (2 \sigma_2 - \sigma_1) + \beta \sigma_2 -  (1 + 2d\beta)\sigma_2 \\
-          &= \sigma_1 + 4d \beta \sigma_2 - 2 \beta \sigma_2 - 2d \beta \sigma_1 + \beta \sigma_1 + \beta \sigma_2
-           - \sigma_2 - 2d \beta \sigma_2 \\
-          &= \sigma_1 (1 + \beta - 2d\beta) - \sigma_2 (1 + \beta - 2d \beta) \\
-          &= (\sigma_1 - \sigma_2)(1 - \beta(2d - 1))
-    \end{align*}
-    Für $\beta < \frac{1}{2d - 1}$ folgt $\sigma_1 \geq \sigma_2$, weswegen beide $0$ sein m\"ussen (Monotonie).
-    \begin{equation*}
-        \implies \beta_c \geq \frac{1}{2d - 1} 
-    \end{equation*}
-\end{frame}
-
-\begin{frame}{Absch\"atzung des kritischen Wertes}
-    Da $\mathbb{L}^1$ eingebettet in $\mathbb{L}^d$ folgt auch, dass 
-    \begin{equation*}
-        \beta_c(d) \leq \beta_c(1)
-    \end{equation*}
-    Absch\"atzung von $\beta_c(1)$ durch Diskretisierungsargument:
-    \begin{center}
-        \includegraphics[width=0.75\textwidth]{images/contact process discretization.png}
-    \end{center}
-\end{frame}
-\begin{frame}{Absch\"atzung des kritischen Wertes - Fortsetzung}
-    \begin{itemize}
-        \item F\"ur $m, n \in \mathbb{Z}, m + n$ ungerade und $\Delta > 0$, sei
-            \begin{align*}
-            X_{m, n} = 1 \iff &D_m \cap ((n - 1)\Delta, (n + 1)\Delta] = \emptyset\\
-                \wedge &B_{m, m - 1} \cap (n\Delta, (n + 1)\Delta] \not = \emptyset\\
-                \wedge &B_{m, m + 1} \cap (n\Delta, (n + 1)\Delta] \not = \emptyset\\
-                \text{sonst} X_{m, n} = 0
-            \end{align*}
-        \item $X_{m, n}$ unabh\"angig, da paarweise disjunkte Mengen und Poisson-Punkt-Prozess
-        \item $\mathbb{P}(X_{m, n}) = (e^{-\Delta})^2 (1 - e^{-\Delta \beta})^2$
-        \item $\mathbb{P}(X_{m, n})$ maximal bzgl. $\Delta$ f\"ur $e^{-\Delta \beta} = \frac{1}{1 + \beta}$
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Absch\"atzung des kritischen Wertes - Rechnung}
-    \begin{align*}
-        (e^{-\Delta})^2(1 - e^{-\Delta\beta})^2 &\overset{x := e^{-\delta}}{=} 
-            x^2(1 - x^\beta)^2 \\
-            &= x^2(x^2\beta - 2 x^\lambda + 1) \\
-            &= x^{2(1 + \beta)} - 2x^{2 + \beta} + x^2 \\
-            0 = \frac{d}{dx} x^{2(1 + \beta)} - 2x^{2 + \beta} + x^2 
-            &= 2(1 + \beta) x^{1 + 2\beta} - 2(2 + \beta)x^{1 + \beta} + 2x \\
-            &= 2x\left( (1 + \beta)x^{2\beta} - (2 + \beta)x^\beta + 1 \right) \\
-       \overset{\mathclap{x \not= 0}}{\iff } 0 &= ( 1 + \beta) x^{2\beta} - ( 2 + \beta)x^\beta + 1 \\
-            &\overset{\mathclap{z:= x^\beta}}{=} (1 + \beta) z^2 - (2 + \beta)x + 1\\
-            \iif e^{-\Delta\beta} = z &\in \{ \frac{1}{1 + \beta}, 1 \}
-    \end{align*}
-\end{frame}
-
-\begin{frame}{Absch\"atzung des kritischen Wertes - Rechnung 2}
-    Nun können wir einsetzen:
-    \begin{align*}
-        \mathbb{P}(X_{m, n} = 1) &= ((e^{-\Delta\beta})^{\frac{1}{\beta}})^2(1 - e^{-\Delta\beta})^2 \\
-                                 &= \left(\frac{1}{1 + \beta}\right)^\frac{2}{\beta}\left(\frac{\beta}{1 + \beta}\right)^2 \\
-                                 &= \frac{1}{(1 + \beta)^{2/\beta}}\frac{\beta^2}{(1 + \beta)^2} \\
-                                 &= \frac{\beta^2}{(1 + \beta)^{(2 + 2/\beta)}} \overset{\beta \to \infty}{\to} 1
-    \end{align*}
-    Wir können die Punkte $(m, n)$ rotieren und die gerichtete Perkolation in $\mathbb{Z}^2$ betrachten. 
-    \begin{itemize}
-        \item $p_c^\to < 1$ 
-        \item $\mathbb{P}(X_{m, n} = 1) > p_c^\to$ f\"ur $\beta$ ausreichend groß
-        \item $\theta(\beta) > 0$
-    \end{itemize}
 \end{frame}
 
 \begin{frame}{Quellen}
